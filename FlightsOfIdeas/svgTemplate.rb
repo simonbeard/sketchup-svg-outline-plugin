@@ -151,6 +151,9 @@ class SvgTemplate
 
 			# Set close callback function
 			@dlg.add_action_callback("on_close") {|d,p| @dlgOpen = false; d.close(); }
+			
+			# Set close callback function
+			@dlg.add_action_callback("on_ok") {|d,p| @dlgOpen = false; d.close(); @paperBorder = p;}			
 					
 			# Set save as callback function
 			@dlg.add_action_callback("on_file_save") {|d,p| 							
