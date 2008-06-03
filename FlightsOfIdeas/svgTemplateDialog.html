@@ -1,0 +1,109 @@
+<head>
+<meta http-equiv="Content-Type" content="text/html" />
+<link href="flightsOfIdeasStyle.css" rel="stylesheet" type="text/css" />
+<title>Setting Flights of Ideas SVG Parameters</title>
+<script language="javascript">
+<!--
+//###########################################################
+//#
+//#    Scalable Vector Graphics (SVG) from Google Sketchup Faces
+//#    Copyright (C) 2008 Simon Beard
+//#
+//#    This program is free software: you can redistribute it and/or modify
+//#    it under the terms of the GNU General Public License as published by
+//#    the Free Software Foundation, either version 3 of the License, or
+//#    (at your option) any later version.
+//#
+//#    This program is distributed in the hope that it will be useful,
+//#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//#    GNU General Public License for more details.
+//#
+//#    You should have received a copy of the GNU General Public License
+//#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//#
+//###########################################################
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Called when ok button is selected
+//////////////////////////////////////////////////////////////////////////////////////////////////
+function onFileSave()
+{
+	window.location='skp:on_file_save@'+document.getElementById("svgFilename").value;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Called when cancelling dlg box
+//////////////////////////////////////////////////////////////////////////////////////////////////
+function onCancel()
+{
+	window.location='skp:on_close';
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Called to set dlg defaults
+//////////////////////////////////////////////////////////////////////////////////////////////////
+function setDefaults(defaults)
+{
+	args = defaults.split(',');
+	document.getElementById("svgFilename").value = args[0];
+	document.getElementById("paperBorder").value = args[1];
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Called to set new SVG filename
+//////////////////////////////////////////////////////////////////////////////////////////////////
+function setFilename(filename)
+{	
+	document.getElementById("svgFilename").value = filename;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Sketchup functions
+//////////////////////////////////////////////////////////////////////////////////////////////////
+function sizeWindow()
+{
+	// check the screen size
+	if(window.screen.availHeight <= 600 || window.screen.availWidth <= 800)
+	{
+		window.location = "skp:small_window";
+	}
+}
+function doLoad()
+{
+    var os = navigator.appVersion.indexOf('Mac') != -1? 'Mac' : 'Win';
+    if(os == 'Win')
+	{
+		window.location='skp:onload'
+	}
+}
+-->
+</script>
+<link href="./spikySawStyle.css" rel="stylesheet" type="text/css" />
+</head>
+<html>
+<body onload="doLoad()"> 
+	<table style="width: 100%">
+		<tr>
+			<td width="20%"><p class="heading-green">Output File:</p></td>
+			<td width="70%"><input class="text" style="width: 100%" id="svgFilename" type="text" value="spikysaw.svg"/></td>
+			<td width="10%"><input class="button" type="button" value="..." onClick="onFileSave()"/></td>			
+		</tr>
+	</table>
+
+	<table style="width: 100%">
+		<tr>
+			<td width="20%"><p class="heading-green">Border (mm):</p></td>
+			<td width="20%"><input class="text" style="width: 100%" id="paperBorder" type="text" value="10"/></td>
+			<td width="60%"></td>
+		</tr>		
+	</table>
+	<table style="width: 100%">
+		<tr>
+			<td width="33%" align="center"><input class="button" onClick="onOk()" type="button" value="Ok"/></td>
+			<td width="33%" align="center"><input class="button" onClick="onCancel()" type="button" value="Cancel"/></td>
+		</tr>
+           </table>
+</div> 
+</body>
+</html>
