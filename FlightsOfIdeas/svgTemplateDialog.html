@@ -37,7 +37,7 @@ function onFileSave()
 //////////////////////////////////////////////////////////////////////////////////////////////////
 function onOk()
 {
-	window.location='skp:on_ok@'+document.getElementById("paperBorder").value;
+	window.location='skp:on_ok@'+document.getElementById("paperBorder").value+","+document.getElementById("svgFilename").value;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,6 +63,14 @@ function setDefaults(defaults)
 //////////////////////////////////////////////////////////////////////////////////////////////////
 function setFilename(filename)
 {	
+
+	// Peculiarity for mac appends ); to filename
+	var os = navigator.appVersion.indexOf('Mac') != -1? 'Mac' : 'Win';
+	if(os == 'Mac')
+	{
+		filename[filename.length-2] = '\0';
+	}
+
 	document.getElementById("svgFilename").value = filename;
 }
 

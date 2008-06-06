@@ -153,7 +153,7 @@ class SvgTemplate
 			@dlg.add_action_callback("on_close") {|d,p| @dlgOpen = false; d.close(); }
 			
 			# Set close callback function
-			@dlg.add_action_callback("on_ok") {|d,p| @dlgOpen = false; d.close(); @paperBorder = p;}			
+			@dlg.add_action_callback("on_ok") {|d,p| @dlgOpen = false; d.close(); args = p.split(','); @paperBorder = args[0]; @svgFilename=args[1]; create_svg;}			
 					
 			# Set save as callback function
 			@dlg.add_action_callback("on_file_save") {|d,p| 							
