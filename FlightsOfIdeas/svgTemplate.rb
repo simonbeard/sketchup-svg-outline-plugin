@@ -41,6 +41,7 @@ class SvgTemplate
 		@maxy = Array.new					
 		@pointArrayFXY = Array.new				# Array for holding 2D projected points in mm of faces
 		@faceIndex=0						# The current face being processed
+		@scaleTemplate=1					# How much to scale for templates
 	end
 
 
@@ -153,7 +154,7 @@ class SvgTemplate
 			@dlg.add_action_callback("on_close") {|d,p| @dlgOpen = false; d.close(); }
 			
 			# Set close callback function
-			@dlg.add_action_callback("on_ok") {|d,p| @dlgOpen = false; d.close(); args = p.split(','); @paperBorder = args[0]; @svgFilename=args[1]; create_svg;}			
+			@dlg.add_action_callback("on_ok") {|d,p| @dlgOpen = false; d.close(); args = p.split(','); @paperBorder = args[0]; @svgFilename=args[1]; @scaleTemplate=args[2].to_f;create_svg;}			
 					
 			# Set save as callback function
 			@dlg.add_action_callback("on_file_save") {|d,p| 							
@@ -178,7 +179,11 @@ class SvgTemplate
 			@dlg.set_background_color("f3f0f0");
 			@dlg.set_file(html, nil)
 			@dlg.show{
-				cmd = "setDefaults('"+@svgFilename+","+@paperBorder+"');";				
+				scaleCheck = "false";
+				if (@scaleTemplate != 1)
+					scaleCheck = "true"
+				end
+				cmd = "setDefaults('"+@svgFilename+","+@paperBorder+","+scaleCheck+"');";				
 				@dlg.execute_script(cmd);
 			}
 			@dlg.set_on_close { @dlgOpen = false; }	
@@ -418,8 +423,8 @@ class SvgTemplate
 			height = (@maxy[f]- @miny[f])+height+border;
 		end
 		
-		pageX = pageX+border;
-		pageY = pageY+border;
+		pageX = (pageX+border)*@scaleTemplate;
+		pageY = (pageY+border)*@scaleTemplate;
 		
 		# Write header to file
 		@svgFile.write "<?xml version=\"1.0\" standalone=\"no\"?>\n"
@@ -445,7 +450,22 @@ class SvgTemplate
 		# Group
 		faceNumber=0
 	  
+		
+		# Scale for template
 		# For each loop
+		for f in 0...@faceIndex			
+			for i in 0...@pointArrayFXY[f].length
+
+				# For points in loop
+				for j in 0...@pointArrayFXY[f][i].length
+					@pointArrayFXY[f][i][j][0] = @pointArrayFXY[f][i][j][0]*@scaleTemplate
+					@pointArrayFXY[f][i][j][1] = @pointArrayFXY[f][i][j][1]*@scaleTemplate
+				end
+			end
+		end
+		
+					
+		
 		for f in 0...@faceIndex
 			@svgFile.write "  <g id=\"face"+faceNumber.to_s+"\" fill=\"none\" stroke=\"rgb(0,0,255)\" stroke-width=\"1\">\n"
 			for i in 0...@pointArrayFXY[f].length

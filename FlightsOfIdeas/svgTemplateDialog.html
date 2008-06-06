@@ -37,7 +37,10 @@ function onFileSave()
 //////////////////////////////////////////////////////////////////////////////////////////////////
 function onOk()
 {
-	window.location='skp:on_ok@'+document.getElementById("paperBorder").value+","+document.getElementById("svgFilename").value;
+	scale = "1";
+	if (document.getElementById("templateScale").checked)
+		scale = "2.8346238938";
+	window.location='skp:on_ok@'+document.getElementById("paperBorder").value+","+document.getElementById("svgFilename").value+","+scale;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,6 +59,9 @@ function setDefaults(defaults)
 	args = defaults.split(',');
 	document.getElementById("svgFilename").value = args[0];
 	document.getElementById("paperBorder").value = args[1];
+	document.getElementById("templateScale").checked = false;
+	if (args[2] == "true")
+		document.getElementById("templateScale").checked = true;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,6 +98,7 @@ function doLoad()
 	{
 		window.location='skp:onload'
 	}
+	document.getElementById("templateScale").checked = false
 }
 -->
 </script>
@@ -102,7 +109,7 @@ function doLoad()
 	<table style="width: 100%">
 		<tr>
 			<td width="20%"><p class="heading-green">Output File:</p></td>
-			<td width="70%"><input class="text" style="width: 100%" id="svgFilename" type="text" value="spikysaw.svg"/></td>
+			<td width="70%"><input class="text" style="width: 100%" id="svgFilename" type="text" value="flightsofideas.svg"/></td>
 			<td width="10%"><input class="button" type="button" value="..." onClick="onFileSave()"/></td>			
 		</tr>
 	</table>
@@ -111,7 +118,7 @@ function doLoad()
 		<tr>
 			<td width="20%"><p class="heading-green">Border (mm):</p></td>
 			<td width="20%"><input class="text" style="width: 100%" id="paperBorder" type="text" value="10"/></td>
-			<td width="60%"></td>
+			<td width="60%"><p class="heading-green"><input type="checkbox" id="templateScale"/> Scale for Ponoko Inkscape Templates</p></td>
 		</tr>		
 	</table>
 	<table style="width: 100%">
