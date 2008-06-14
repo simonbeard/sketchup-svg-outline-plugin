@@ -42,6 +42,7 @@ class SvgTemplate
 		@pointArrayFXY = Array.new				# Array for holding 2D projected points in mm of faces
 		@faceIndex=0						# The current face being processed
 		@scaleTemplate=1					# How much to scale for templates
+		@units="mm"						# Units for dlg box
 	end
 
 
@@ -154,7 +155,9 @@ class SvgTemplate
 			@dlg.add_action_callback("on_close") {|d,p| @dlgOpen = false; d.close(); }
 			
 			# Set close callback function
-			@dlg.add_action_callback("on_ok") {|d,p| @dlgOpen = false; d.close(); args = p.split(','); @paperBorder = args[0]; @svgFilename=args[1]; @scaleTemplate=args[2].to_f;create_svg;}			
+			@dlg.add_action_callback("on_ok") {|d,p| @dlgOpen = false; d.close(); args = p.split(','); 
+				@paperBorder = args[0]; @svgFilename=args[1]; @scaleTemplate=args[2].to_f;  @units=args[3];
+				create_svg;}			
 					
 			# Set save as callback function
 			@dlg.add_action_callback("on_file_save") {|d,p| 							
@@ -183,7 +186,7 @@ class SvgTemplate
 				if (@scaleTemplate != 1)
 					scaleCheck = "true"
 				end
-				cmd = "setDefaults('"+@svgFilename+","+@paperBorder+","+scaleCheck+"');";				
+				cmd = "setDefaults('"+@svgFilename+","+@paperBorder+","+scaleCheck+","+@units+"');";				
 				@dlg.execute_script(cmd);
 			}
 			@dlg.set_on_close { @dlgOpen = false; }	
@@ -445,7 +448,7 @@ class SvgTemplate
 		@svgFile.write " xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n"
 		
 		# SVG description
-		@svgFile.write "<desc>Output from Flights of Ideas Sketchup Plugin</desc>\n\n"
+		@svgFile.write "<desc>Output from Flights of Ideas SVG Sketchup Plugin</desc>\n\n"
 	  	  
 		# Group
 		faceNumber=0
@@ -457,15 +460,13 @@ class SvgTemplate
 			for i in 0...@pointArrayFXY[f].length
 
 				# For points in loop
-				for j in 0...@pointArrayFXY[f][i].length
+				for j in 0...@pointArrayFXY[f][i].length					
 					@pointArrayFXY[f][i][j][0] = @pointArrayFXY[f][i][j][0]*@scaleTemplate
 					@pointArrayFXY[f][i][j][1] = @pointArrayFXY[f][i][j][1]*@scaleTemplate
 				end
 			end
 		end
-		
-					
-		
+									
 		for f in 0...@faceIndex
 			@svgFile.write "  <g id=\"face"+faceNumber.to_s+"\" fill=\"none\" stroke=\"rgb(0,0,255)\" stroke-width=\"1\">\n"
 			for i in 0...@pointArrayFXY[f].length
@@ -483,9 +484,7 @@ class SvgTemplate
 		# Write footer and close
 		@svgFile.write "</svg>\n"
 		@svgFile.close
-		
-		UI.messagebox "Finished writing to "+@svgFilename, MB_OK, "Success"
-		
+				
 	end
 
 end

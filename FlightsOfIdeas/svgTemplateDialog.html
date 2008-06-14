@@ -1,7 +1,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html" />
 <link href="flightsOfIdeasStyle.css" rel="stylesheet" type="text/css" />
-<title>Setting Flights of Ideas SVG Parameters</title>
+<title>SVG Parameters (Flights of Ideas)</title>
 <script language="javascript">
 <!--
 //###########################################################
@@ -24,6 +24,8 @@
 //#
 //###########################################################
 
+var previousUnits="";
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Called when ... button is selected
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,9 +40,15 @@ function onFileSave()
 function onOk()
 {
 	scale = "1";
-	if (document.getElementById("templateScale").checked)
-		scale = "2.8346238938";
-	window.location='skp:on_ok@'+document.getElementById("paperBorder").value+","+document.getElementById("svgFilename").value+","+scale;
+	if (document.getElementById("templateScale").checked)		
+		scale = "2.835";
+		
+	// Convert to mm
+	if (document.getElementById("inches").selected) {
+		window.location='skp:on_ok@'+(document.getElementById("paperBorder").value*25.4)+","+document.getElementById("svgFilename").value+","+scale+","+previousUnits;
+	} else {	
+		window.location='skp:on_ok@'+document.getElementById("paperBorder").value+","+document.getElementById("svgFilename").value+","+scale+","+previousUnits;
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,6 +57,22 @@ function onOk()
 function onCancel()
 {
 	window.location='skp:on_close';
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Called when changing units
+//////////////////////////////////////////////////////////////////////////////////////////////////
+function changeUnits()
+{
+	if ((document.getElementById("inches").selected) && (previousUnits=="mm")) {	
+		document.getElementById("paperBorder").value=document.getElementById("paperBorder").value*0.0393700787;
+		document.getElementById("borderLabel").innerHTML="Border (in):"
+		previousUnits	="in";
+	} else if ((document.getElementById("millimeters").selected) && (previousUnits=="in")) {
+		document.getElementById("paperBorder").value=document.getElementById("paperBorder").value*25.4;
+		document.getElementById("borderLabel").innerHTML="Border (mm):"
+		previousUnits	="mm";
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,6 +86,13 @@ function setDefaults(defaults)
 	document.getElementById("templateScale").checked = false;
 	if (args[2] == "true")
 		document.getElementById("templateScale").checked = true;
+	document.getElementById("millimeters").selected=true;
+	document.getElementById("borderLabel").innerHTML="Border (mm):"
+	previousUnits="mm";
+	if (args[3] == "in") {		
+		document.getElementById("inches").selected=true;
+		changeUnits();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,7 +105,12 @@ function setFilename(filename)
 	var os = navigator.appVersion.indexOf('Mac') != -1? 'Mac' : 'Win';
 	if(os == 'Mac')
 	{
-		filename[filename.length-2] = '\0';
+		if (filename[filename.length-1]==';')
+			filename[filename.length-1] = '\0';
+		if (filename[filename.length-1]==')'	)
+			filename[filename.length-1] = '\0';		
+		if (filename[filename.length-1]=='\'')
+			filename[filename.length-1] = '\0';			
 	}
 
 	document.getElementById("svgFilename").value = filename;
@@ -106,27 +142,65 @@ function doLoad()
 </head>
 <html>
 <body onload="doLoad()"> 
-	<table style="width: 100%">
-		<tr>
-			<td width="20%"><p class="heading-green">Output File:</p></td>
-			<td width="70%"><input class="text" style="width: 100%" id="svgFilename" type="text" value="flightsofideas.svg"/></td>
-			<td width="10%"><input class="button" type="button" value="..." onClick="onFileSave()"/></td>			
-		</tr>
-	</table>
-
-	<table style="width: 100%">
-		<tr>
-			<td width="20%"><p class="heading-green">Border (mm):</p></td>
-			<td width="20%"><input class="text" style="width: 100%" id="paperBorder" type="text" value="10"/></td>
-			<td width="60%"><p class="heading-green"><input type="checkbox" id="templateScale"/> Scale for Ponoko Inkscape Templates</p></td>
-		</tr>		
-	</table>
-	<table style="width: 100%">
-		<tr>
-			<td width="33%" align="center"><input class="button" onClick="onOk()" type="button" value="Ok"/></td>
-			<td width="33%" align="center"><input class="button" onClick="onCancel()" type="button" value="Cancel"/></td>
-		</tr>
-           </table>
+<table style="width: 100%">
+	<tr>	
+		<td width="50px">
+			<img src="./Images/dragonfly_50.png"/>
+		</td>	
+		<td width="100%">
+			<h2>Export Faces To SVG</h2>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<table style="width: 100%">
+				<tr>
+					<td width="20%"><p class="heading-green">Output File:</p></td>
+					<td width="70%"><input class="text" style="width: 100%" id="svgFilename" type="text" value="flightsofideas.svg"/></td>
+					<td width="10%"><input class="button" type="button" value="..." onClick="onFileSave()"/></td>			
+				</tr>
+			</table>
+			<table style="width: 100%">
+				<tr>
+					<td width="20%"></td>
+					<td width="80%"><p class="heading-green"><input type="checkbox" id="templateScale"/> Scale for Ponoko Inkscape Templates</p></td>
+				</tr>		
+			</table>			
+			<table style="width: 100%">
+				<tr>
+					<td width="20%"><p class="heading-green">Measurements:</p></td>
+					<td width="20%">
+						<select width="100%">
+							<option id="millimeters">Millimeters...</option>
+							<option id="inches">Inches...</option>
+						</select>						
+					</td>		
+					<td width="20%">
+						<input class="button" onClick="changeUnits()" type="button" value="Update Values"/>
+					</td>
+					<td width="40%"></td>					
+				</tr>		
+			</table>	
+			<table style="width: 100%">
+				<tr>
+					<td width="20%"><p class="heading-green" id="borderLabel">Border:</p></td>
+					<td width="20%"><input class="text" style="width: 100%" id="paperBorder" type="text" value="10"/></td>
+					<td width="60%"></td>
+				</tr>		
+			</table>		
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<table style="width: 100%">
+				<tr>
+					<td width="33%" align="center"><input class="button" onClick="onOk()" type="button" value="Ok"/></td>
+					<td width="33%" align="center"><input class="button" onClick="onCancel()" type="button" value="Cancel"/></td>
+				</tr>
+			   </table>
+		<td>	   
+	</tr>
+</table>	   
 </div> 
 </body>
 </html>
