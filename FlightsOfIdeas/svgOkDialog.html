@@ -1,0 +1,89 @@
+<head>
+<meta http-equiv="Content-Type" content="text/html" />
+<link href="flightsOfIdeasStyle.css" rel="stylesheet" type="text/css" />
+<title>SVG Exported (Flights of Ideas)</title>
+<script language="javascript">
+<!--
+//###########################################################
+//#
+//#    Scalable Vector Graphics (SVG) from Google Sketchup Faces
+//#    Copyright (C) 2008 Simon Beard
+//#
+//#    This program is free software: you can redistribute it and/or modify
+//#    it under the terms of the GNU General Public License as published by
+//#    the Free Software Foundation, either version 3 of the License, or
+//#    (at your option) any later version.
+//#
+//#    This program is distributed in the hope that it will be useful,
+//#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//#    GNU General Public License for more details.
+//#
+//#    You should have received a copy of the GNU General Public License
+//#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//#
+//###########################################################
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Called when closing dlg box
+//////////////////////////////////////////////////////////////////////////////////////////////////
+function onOk()
+{
+	window.location='skp:on_close';
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Called when closing dlg box
+//////////////////////////////////////////////////////////////////////////////////////////////////
+function onLaunch()
+{
+	window.location='skp:on_launch';
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Sketchup functions
+//////////////////////////////////////////////////////////////////////////////////////////////////
+function sizeWindow()
+{
+	// check the screen size
+	if(window.screen.availHeight <= 600 || window.screen.availWidth <= 800)
+	{
+		window.location = "skp:small_window";
+	}
+}
+function doLoad()
+{
+    var os = navigator.appVersion.indexOf('Mac') != -1? 'Mac' : 'Win';
+    if(os == 'Win')
+	{
+		window.location='skp:onload'
+	}	
+}
+-->
+</script>
+<link href="./flightsOfIdeasStyle.css" rel="stylesheet" type="text/css" />
+</head>
+<html>
+<body onload="doLoad()"> 
+<table style="width: 100%">
+	<tr style="width: 100%">		
+		<td>
+			<center class="heading">	
+			<img src="./Images/dragonfly_50.png" align="middle">&nbsp;&nbsp;&nbsp;&nbsp;<b>File Exported</b>
+			</center>
+		</td>		
+	</tr>
+	<tr style="width: 100%">
+		<td style="width: 100%">
+			<center><input class="button" onClick="onLaunch()" type="button" value="Launch Browser"/></center>
+		<td>
+	</tr>
+	<tr style="width: 100%">
+		<td style="width: 100%">
+			<center><input class="button" onClick="onOk()" type="button" value="Ok"/><center>
+		</td>	   
+	</tr>
+</table>	   
+</div> 
+</body>
+</html>

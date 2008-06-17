@@ -28,7 +28,9 @@ class SvgTemplate
 	def initialize()					
 		@svgFilename = "flightsOfIdeas.svg" 	# Name of file to which to export SVG templates		
 		@dlg = nil							# The dialog object
-		@dlgOpen = false					# Whether the dlg is currently open
+		@dlgOpen = false					# Whether the ok dlg is currently open
+		@okdlg = nil						# The ok dialog object
+		@okdlgOpen = false					# Whether the dlg is currently open		
 		@paperWidth = "210"					# A4 width
 		@paperHeight = "297"					# A4 height
 		@paperBorder = "10"					# 10mm border
@@ -149,7 +151,7 @@ class SvgTemplate
 			end
 			
 			# Create new dlg
-			@dlg = UI::WebDialog.new("SVG Template Preferences", false, "FlightsOfIdeas", 800, 600, 300, 150, true);
+			@dlg = UI::WebDialog.new("SVG Template Preferences", false, "FlightsOfIdeas", 670, 290, 300, 150, true);
 
 			# Set close callback function
 			@dlg.add_action_callback("on_close") {|d,p| @dlgOpen = false; d.close(); }
@@ -197,6 +199,45 @@ class SvgTemplate
 		end
 	end
 	
+	
+	#######################################################
+	# Create export ok dialog box for SVG templates
+	#######################################################	
+	def export_ok_dialog()
+		
+		# Check that dlg not already opened
+		if not @okdlgOpen
+			@okdlgOpen = true
+			
+			# Get HTML file for dlg
+			html = File.dirname(__FILE__) + "/svgOkDialog.html";
+			if (html.length == 0)
+				return false;
+			end
+			
+			# Create new dlg
+			@okdlg = UI::WebDialog.new("SVG Export Ok", false, "FlightsOfIdeasOk", 400, 190, 300, 150, true);
+
+			# Set close callback function
+			@okdlg.add_action_callback("on_close") {|d,p| @okdlgOpen = false; d.close(); }
+			
+			# Set close callback function
+			@okdlg.add_action_callback("on_ok") {|d,p| @dlgOpen = false; d.close(); }	
+
+			# Set close callback function
+			@okdlg.add_action_callback("on_launch") {|d,p| UI.openURL("file://"+@svgFilename); }
+			
+			# Show the dlg
+			@okdlg.set_background_color("f3f0f0");
+			@okdlg.set_file(html, nil)
+			@okdlg.show{}
+			@okdlg.set_on_close { @okdlgOpen = false; }	
+			
+		else # Close if dlg already open
+			@okdlgOpen = false; 
+			@okdlg.close();
+		end
+	end		
 		
 ###########################################################	
 
@@ -484,7 +525,8 @@ class SvgTemplate
 		# Write footer and close
 		@svgFile.write "</svg>\n"
 		@svgFile.close
-				
+		
+		self.export_ok_dialog();		
 	end
 
 end
