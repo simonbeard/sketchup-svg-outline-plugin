@@ -1,0 +1,375 @@
+<head>
+<meta http-equiv="Content-Type" content="text/html" />
+<link href="flightsOfIdeasStyle.css" rel="stylesheet" type="text/css" />
+<title>SVG Parameters (Flights of Ideas)</title>
+<script type="text/javascript" src="jscolor/jscolor.js"></script>
+<script language="javascript">
+<!--
+//###########################################################
+//#
+//#    Scalable Vector Graphics (SVG) from Google Skdissectup Faces
+//#    Copyright (C) 2009 Simon Beard
+//#
+//#    This program is free software: you can redistribute it and/or modify
+//#    it under the terms of the GNU General Public License as published by
+//#    the Free Software Foundation, either version 3 of the License, or
+//#    (at your option) any later version.
+//#
+//#    This program is distributed in the hope that it will be useful,
+//#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//#    GNU General Public License for more details.
+//#
+//#    You should have received a copy of the GNU General Public License
+//#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//#
+//###########################################################
+
+var previousUnits="mm";
+var svgEditorExec="";
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Called when ... button is selected
+//////////////////////////////////////////////////////////////////////////////////////////////////
+function onFileSave()
+{
+	window.location='skp:on_file_save@'+document.getElementById("svgFilename").value;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Called when configure button is selected
+//////////////////////////////////////////////////////////////////////////////////////////////////
+function onConfigureSvgEditor()
+{
+	window.location='skp:on_svg_editor_configure@'+svgEditorExec;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Called when Ok button is selected
+//////////////////////////////////////////////////////////////////////////////////////////////////
+function onOk()
+{
+	exportAs = "paths";
+	hidden = "false";
+	outline = "false";
+	dissect = "false";
+	orphans = "false";
+	text="false";
+	textAs="script";
+	outline = "false";
+	execEditor = "false";
+	editor = "";
+	if (document.getElementById("exportOutline").checked)		
+		outline = "true";
+	if (document.getElementById("exportHidden").checked)		
+		hidden = "true";
+	if (document.getElementById("exportDissect").checked)		
+		dissect = "true";	
+	if (document.getElementById("exportOrphans").checked)		
+		orphans = "true";	
+	if (document.getElementById("exportText").checked)		
+		text = "true";	
+	if (document.getElementById("exportType").selectedIndex == 1)
+		exportAs = "lines";
+	if (document.getElementById("textType").selectedIndex == 0)
+		textAs = "SVG";		
+	if (document.getElementById("svgEditor").checked)
+		execEditor = "true";
+		editor = document.getElementById("svgEditorPath").value;				
+	window.location='skp:on_ok@'+document.getElementById("svgFilename").value+","+document.getElementById("paperBorder").value+","+previousUnits+","+exportAs+","+hidden+","+outline+","+
+		document.getElementById("outlineColour").value+","+document.getElementById("outlineLineWidth").value+","+dissect+","+document.getElementById("dissectColour").value+","+
+		document.getElementById("dissectLineWidth").value+","+orphans+","+document.getElementById("orphanColour").value+","+document.getElementById("orphanLineWidth").value+","+
+		text+","+document.getElementById("textColour").value+","+document.getElementById("textLineWidth").value+","+textAs+","+document.getElementById("textHeight").value+","+
+		execEditor+","+editor;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Called when cancelling dlg box
+//////////////////////////////////////////////////////////////////////////////////////////////////
+function onCancel()
+{
+	window.location='skp:on_close';
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Called for help
+//////////////////////////////////////////////////////////////////////////////////////////////////
+function onHelp()
+{
+	window.location='skp:on_help';
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Called when changing units
+//////////////////////////////////////////////////////////////////////////////////////////////////
+function changeUnits()
+{
+	if ((document.getElementById("inches").selected) && (previousUnits == "mm")) {	
+		document.getElementById("borderUnits").innerHTML="in";	
+		document.getElementById("outlineUnits").innerHTML="in";	
+		document.getElementById("orphanUnits").innerHTML="in";	
+		document.getElementById("dissectUnits").innerHTML="in";			
+		document.getElementById("textLineWidthUnits").innerHTML="in";	
+		document.getElementById("textHeightUnits").innerHTML="in";	
+		document.getElementById("paperBorder").value = document.getElementById("paperBorder").value*0.0393700787402;
+		document.getElementById("outlineLineWidth").value = document.getElementById("outlineLineWidth").value*0.0393700787402;
+		document.getElementById("dissectLineWidth").value = document.getElementById("dissectLineWidth").value*0.0393700787402;
+		document.getElementById("orphanLineWidth").value = document.getElementById("orphanLineWidth").value*0.0393700787402;
+		document.getElementById("textLineWidth").value = document.getElementById("textLineWidth").value*0.0393700787402;
+		document.getElementById("textHeight").value = document.getElementById("textHeight").value*0.0393700787402;
+		previousUnits	="in";
+	} else if ((document.getElementById("millimeters").selected) && (previousUnits == "in")) {
+		document.getElementById("borderUnits").innerHTML="mm";		
+		document.getElementById("outlineUnits").innerHTML="mm";	
+		document.getElementById("orphanUnits").innerHTML="mm";	
+		document.getElementById("dissectUnits").innerHTML="mm";			
+		document.getElementById("textLineWidthUnits").innerHTML="mm";	
+		document.getElementById("textHeightUnits").innerHTML="mm";	
+		document.getElementById("paperBorder").value = document.getElementById("paperBorder").value/0.0393700787402;
+		document.getElementById("outlineLineWidth").value = document.getElementById("outlineLineWidth").value/0.0393700787402;
+		document.getElementById("dissectLineWidth").value = document.getElementById("dissectLineWidth").value/0.0393700787402;
+		document.getElementById("orphanLineWidth").value = document.getElementById("orphanLineWidth").value/0.0393700787402;
+		document.getElementById("textLineWidth").value = document.getElementById("textLineWidth").value/0.0393700787402;
+		document.getElementById("textHeight").value = document.getElementById("textHeight").value/0.0393700787402;
+		previousUnits	="mm";
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Called to set dlg defaults
+//////////////////////////////////////////////////////////////////////////////////////////////////
+function setDefaults(defaults)
+{	
+	document.getElementById("exportHidden").checked = false;
+	document.getElementById("exportOutline").checked = true;
+	document.getElementById("exportdissect").checked = true;
+	document.getElementById("exportOrphans").checked = true;
+	document.getElementById("exportText").checked = false;	
+	previousUnits="mm";		
+
+	args = defaults.split(',');
+	document.getElementById("svgFilename").value = args[0];
+	document.getElementById("paperBorder").value = args[1];
+	
+	if (args[2] == "in") {		
+		document.getElementById("inches").selected=true;
+		changeUnits();
+	}
+	
+	document.getElementById("exporttype").selectedIndex = 0;
+	if (args[3] == "lines")
+		document.getElementById("exporttype").selectedIndex = 1;	
+	
+	if (args[4] == "true")
+		document.getElementById("exportHidden").checked = true;	
+	
+	if (args[5] == "true")
+		document.getElementById("exportOutline").checked = true;
+	document.getElementById("outlineColour").value = args[6];
+	document.getElementById("outlineLineWidth").value = args[7];
+	
+	if (args[8] == "true")
+		document.getElementById("exportDissect").checked = true;
+	document.getElementById("dissectColour").value = args[9];		
+	document.getElementById("dissectLineWidth").value = args[10];
+		
+	if (args[11] == "true")
+		document.getElementById("exportOrphans").checked = true;
+	document.getElementById("orphanColour").value = args[12];		
+	document.getElementById("orphanLineWidth").value = args[13];		
+			
+	if (args[14] == "true")
+		document.getElementById("exportText").checked = true;
+	document.getElementById("textColour").value = args[15];
+	document.getElementById("textLineWidth").value = args[16];			
+	document.getElementById("textType").selectedIndex = 1;	
+	if (args[17] == "SVG")
+		document.getElementById("texttype").selectedIndex = 0;		
+	document.getElementById("textHeight").value = args[18];
+		
+	if (args[19] == "true")
+		document.getElementById("svgEditor").checked = true;	
+	document.getElementById("svgEditorPath").value = args[20];		
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Called to set new SVG filename
+//////////////////////////////////////////////////////////////////////////////////////////////////
+function setFilename(filename)
+{	
+	document.getElementById("svgFilename").value = filename;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Called to set new SVG editor
+//////////////////////////////////////////////////////////////////////////////////////////////////
+function setSvgEditor(svgeditor)
+{	
+	document.getElementById("svgEditorPath").value = svgeditor;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Setup functions
+//////////////////////////////////////////////////////////////////////////////////////////////////
+function sizeWindow()
+{
+	// check the screen size
+	if(window.screen.availHeight <= 600 || window.screen.availWidth <= 800)
+	{
+		window.location = "skp:small_window";
+	}
+}
+function doLoad()
+{
+    var os = navigator.appVersion.indexOf('Mac') != -1? 'Mac' : 'Win';
+    if(os == 'Win')
+	{
+		window.location='skp:onload'
+	}
+	updateColour();
+}
+</script>
+<link href="./flightsOfIdeas.css" rel="stylesheet" type="text/css" />
+</head>
+<html>
+<body onload=""> 
+<table style="width: 100%">
+	<tr>	
+		<td width="50px">
+			<img src="./Images/dragonfly_50.png"/>
+		</td>	
+		<td width="100%">
+			<h2>Export Faces To SVG</h2>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<hr style="width:10%;text-align:left;margin-left:0"/>	
+			<table style="width: 100%">
+				<tr>
+					<td width="4.5%"></td>
+					<td width="25%"><p class="heading-green">Save SVG to the following file:</p></td>
+					<td width="62%">&nbsp;<input class="text" style="width: 100%" id="svgFilename" type="text" value="flightsofideas.svg"/></td>
+					<td width="8%"><input class="button" type="button" value="..." onClick="onFileSave()"/></td>			
+					<td width="4.5%"></td>
+				</tr>
+			</table>
+			<hr style="width:10%;text-align:left;margin-left:0"/>		
+			<table style="width: 100%">
+				<tr>
+					<td width="4.5%"></td>
+					<td width="25%"><p class="heading-green">Group exported face(s) as: </p></td>
+					<td width="25%"><select width="100%" id="exporttype">									
+									<option id="paths">Paths...</option>
+									<option id="lines">Lines...</option>									
+								</select></td>
+					<td width="47.5%"></td>						
+				</tr>		
+			</table>								
+			<table style="width: 100%">
+				<tr>		
+					<td width="4.5%"></td>				
+					<td width="25%"><p class="heading-green">Measurements for file: </p></td>
+					<td width="25%"><select width="100%" onchange="changeUnits()" id="units">
+									<option id="millimeters">Millimeters...</option>
+									<option id="inches">Inches...</option>
+								</select></td>
+					<td width="47.5%"></td>						
+				</tr>	
+			</table>				
+			<table style="width: 100%">
+				<tr>		
+					<td width="4.5%"></td>
+					<td width="25%"><p class="heading-green" id="borderLabel">Page border:&nbsp;</p></td>
+					<td width="25%"><input class="text" style="width: 55px" id="paperBorder" type="text" value="10"/>&nbsp;<font class="green" id="borderUnits">mm</font></td>											
+					<td width="47.5%"></td>						
+				</tr>		
+			</table>				
+			<hr style="width:10%;text-align:left;margin-left:0"/>	
+			<table style="width: 100%">
+				<tr>
+					<td width="4.5%"></td>
+					<td width="25%"><p class="heading-green"><input type="checkbox" id="exportHidden"/> Export hidden entities</p></td>					
+					<td width="13%"></td>
+					<td width="15%"></td>					
+					<td width="18%"></td>
+					<td width="20%"></td>
+					<td width="4.5%"></td>				
+				</tr>					
+			</table>				
+			<table style="width: 100%">
+				<tr>
+					<td width="4.5%"></td>
+					<td width="25%"><p class="heading-green"><input checked="true" type="checkbox" id="exportOutline"/> Export outlines of face(s) -</p></td>
+					<td width="13%"><p class="heading-green">Colour:&nbsp;<input class="color" value="0000FF" style="width: 55px;" id="outlineColour"></p></td>
+					<td width="15%"><p class="heading-green" id="borderLabel">Width:&nbsp;<input class="text" style="width: 55px" id="outlineLineWidth" type="text" value="1"/>&nbsp;<font class="green" id="outlineUnits">mm</font></p></td>
+					<td width="18%"></td>
+					<td width="20%"></td>
+					<td width="4.5%"></td>
+				</tr>					
+			</table>						
+			<table style="width: 100%">
+				<tr>
+					<td width="4.5%"></td>
+					<td width="25%"><p class="heading-green"><input checked="true" type="checkbox" id="exportDissect"/> Export lines dissecting face(s) -</p></td>
+					<td width="13%"><p class="heading-green">Colour:&nbsp;<input class="color" value="FF0000" style="width: 55px;" id="dissectColour"></p></td>
+					<td width="15%"><p class="heading-green" id="borderLabel">Width:&nbsp;<input class="text" style="width: 55px" id="dissectLineWidth" type="text" value="1"/>&nbsp;<font class="green" id="dissectUnits">mm</font></p></td>					
+					<td width="18%"></td>
+					<td width="20%"></td>
+					<td width="4.5%"></td>
+				</tr>					
+			</table>
+			<table style="width: 100%">
+				<tr>
+					<td width="4.5%"></td>
+					<td width="25%"><p class="heading-green"><input checked="true" type="checkbox" id="exportOrphans"/> Export lines on face(s) -</p></td>
+					<td width="13%"><p class="heading-green">Colour:&nbsp;<input class="color" value="00FF00" style="width: 55px;" id="orphanColour"></p></td>
+					<td width="15%"><p class="heading-green" id="borderLabel">Width:&nbsp;<input class="text" style="width: 55px" id="orphanLineWidth" type="text" value="1"/>&nbsp;<font class="green" id="orphanUnits">mm</font></p></td>					
+					<td width="18%"></td>
+					<td width="20%"></td>
+					<td width="4.5%"></td>
+				</tr>					
+			</table>	
+			<table style="width: 100%">
+				<tr>
+					<td width="4.5%"></td>
+					<td width="25%"><p class="heading-green"><input type="checkbox" id="exportText"/> Export annotations for face(s) -</p></td>
+					<td width="13%"><p class="heading-green">Colour:&nbsp;<input class="color" value="000000" style="width: 55px;" id="textColour"></p></td>
+					<td width="15%"><p class="heading-green" id="borderLabel">Width:&nbsp;<input class="text" style="width: 55px" id="textLineWidth" type="text" value="1"/>&nbsp;<font class="green" id="textLineWidthUnits">mm</font></p></td>										
+					<td width="18%"><p class="heading-green">As: <select width="80%" id="textType">
+														<option id="font">SVG Text...</option>
+														<option id="script">Laser Script Drawing...</option>
+													</select></p>	
+					</td>
+					<td width="20%"><p class="heading-green">Height: <input class="text" style="width: 55px" id="textHeight" type="text" value="10"/>&nbsp;<font class="green" id="textHeightUnits">mm</font></p></td>					
+					<td width="4.5%"></td>
+				</tr>					
+			</table>
+			<hr style="width:10%;text-align:left;margin-left:0"/>	
+			<table style="width: 100%">
+				<tr>
+					<td width="4.5%"></td>
+					<td width="25%"><p class="heading-green"><input type="checkbox" id="svgEditor"/> Load SVG editor after save:</p></td>
+					<td width="62%">&nbsp;<input class="text" style="width: 100%" id="svgEditorPath" type="text" value=""/></td>
+					<td width="8%" align="left"><input class="button" onClick="onConfigureSvgEditor()" type="button" value="..."/></td>					
+					<td width="4.5%"></td>
+				</tr>					
+			</table>	
+			<hr style="width:10%;text-align:left;margin-left:0"/>				
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<table style="width: 100%">
+				<tr>
+					<td width="33%" align="center"><input class="button" style="width:55px" onClick="onOk()" type="button" value="Save"/></td>
+					<td width="33%" align="center"><input class="button" style="width:55px"onClick="onHelp()" type="button" value="Help"/></td>
+					<td width="33%" align="center"><input class="button" style="width:55px"onClick="onCancel()" type="button" value="Exit"/></td>
+				</tr>
+			   </table>
+		<td>	   
+	</tr>
+</table>	   
+</div> 
+</body>
+</html>

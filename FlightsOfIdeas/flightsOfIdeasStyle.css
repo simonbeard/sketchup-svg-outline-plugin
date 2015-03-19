@@ -27,6 +27,7 @@ center.heading	{ 	font-family: Arial, sans-serif; color: #009000; background-col
 p						{ 	font-family: Arial, sans-serif; color: #000000; background-color:#FFFFFF; padding-top:0cm; padding-bottom:0.1cm;}
 p.heading-blue	{ 	font-family: Arial, sans-serif; color: #000066; background-color:#FFFFFF; font-weight:bold; padding-top:0cm; padding-bottom:0cm;}
 p.heading-green	{ 	font-family: Arial, sans-serif; color: #009000; background-color:#FFFFFF; font-weight:bold; padding-top:0cm; padding-bottom:0cm;}
+font.green			{	font-family: Arial, sans-serif; color: #009000; background-color:#FFFFFF; font-weight:bold; padding-top:0cm; padding-bottom:0cm;}
 p.heading-red  	{ 	font-family: Arial, sans-serif; color: #660000; background-color:#FFFFFF; font-weight:bold; padding-top:0cm; padding-bottom:0cm;}
 table 				{ 	width:100% }
 tr						{	padding-top:0.1cm; padding-bottom:0.1cm; padding-left:0.1cm; padding-right:0.1cm; }
