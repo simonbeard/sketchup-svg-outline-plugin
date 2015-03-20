@@ -25,7 +25,7 @@ require 'LangHandler.rb'
 # Create toolbar icon for website
 toolbar = UI::Toolbar.new "FlightsOfIdeas"
 cmd = UI::Command.new("flightsofideas") { 
-	UI.openURL("http://www.flightsofideas.net")
+	UI.openURL("http://simonbeard.github.io/sketchup-svg-outline-plugin/")
 }		
 path = Sketchup.find_support_file "FlightsOfIdeas.png", "plugins/FlightsOfIdeas/Images/"		
 cmd.small_icon = path
